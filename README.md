@@ -80,7 +80,7 @@ A Palavra MAINTAINER está obsoleta, no lugar dela utilizaremos a palavra reserv
 Você pode adicionar rótulos à sua imagem para ajudar a organizar imagens por projeto, registrar informações de licenciamento, para ajudar na automação ou por outros motivos. Para cada rótulo, adicione uma linha começando com LABEL e com um ou mais pares chave-valor. Os exemplos a seguir mostram os diferentes formatos aceitáveis. Os comentários explicativos estão incluídos em linha.
 
 ~~~dockerfile
-# Set one or more individual labels
+# Definir um ou mais rótulos individuais
 LABEL com.example.version="0.0.1-alfa"
 LABEL vendor1="Ebyrt Games"
 LABEL vendor2=Ebyrt\ Games
@@ -127,6 +127,31 @@ Para usar um shell diferente, diferente de ‘/bin/sh’, use o formulário exec
 ~~~dockerfile
 RUN ["/bin/bash", "-c", "echo hello"]
 ~~~
+
+## CMD
+
+A instrução CMD tem três formas:
+
+<ul>
+<li>forma executiva, esta é a forma preferida</li>
+
+~~~dockerfile
+CMD ["executável","param1","param2"]
+~~~
+
+<li>como parâmetros padrão para ENTRYPOINT</li>
+
+~~~dockerfile
+CMD ["param1","param2"]
+~~~
+
+<li>forma de shell</li>
+
+~~~dockerfile
+CMD executavel param1
+~~~
+
+</ul>
 
 <div align="center">
   <br/>
