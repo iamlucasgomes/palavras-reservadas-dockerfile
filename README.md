@@ -222,6 +222,41 @@ exemplo resumido:
 ENV MY_NAME="John Doe" MY_DOG=Rex\ The\ Dog \ MY_CAT=fluffy
 ~~~
 
+## ADD ou COPY
+
+Embora ADD e COPY sejam funcionalmente semelhantes, em geral, COPY é o preferido. Isso porque é mais transparente que o ADD. COPY suporta apenas a cópia básica de arquivos locais no contêiner, enquanto o ADD possui alguns recursos (como extração de tar somente local e suporte a URL remoto) que não são imediatamente óbvios. Conseqüentemente, o melhor uso para ADD é a extração automática do arquivo tar local na imagem, como em ADD rootfs.tar.xz /.
+
+Se você tiver várias etapas do Dockerfile que usam arquivos diferentes do seu contexto, COPIE-os individualmente, em vez de todos de uma vez. Isso garante que o cache de compilação de cada etapa seja invalidado apenas (forçando a etapa a ser executada novamente) se os arquivos especificamente necessários forem alterados.
+
+Por exemplo:
+
+~~~dockerfile
+COPY requirements.txt /tmp/
+RUN pip install --requirement /tmp/requirements.txt
+COPY . /tmp/
+~~~
+
+Resulta em menos invalidações de cache para a etapa RUN do que se você colocar COPY . /tmp/ antes dele.
+
+Como o tamanho da imagem é importante, o uso de ADD para buscar pacotes de URLs remotos é fortemente desencorajado; você deve usar curl ou wget em vez disso. Dessa forma, você pode excluir os arquivos que não precisa mais depois de extraídos e não precisa adicionar outra camada à sua imagem. Por exemplo, você deve evitar fazer coisas como:
+
+~~~dockerfile
+ADD https://example.com/big.tar.xz /usr/src/things/
+RUN tar -xJf /usr/src/things/big.tar.xz -C /usr/src/things
+RUN make -C /usr/src/things all
+~~~
+
+E em vez disso, faça algo como:
+
+~~~dockerfile
+RUN mkdir -p /usr/src/things \
+    && curl -SL https://example.com/big.tar.xz \
+    | tar -xJC /usr/src/things \
+    && make -C /usr/src/things all
+~~~
+
+Para outros itens (arquivos, diretórios) que não requerem o recurso de extração automática de tar do ADD, você deve sempre usar COPY.
+
 <div align="center">
   <br/>
   <br/>
