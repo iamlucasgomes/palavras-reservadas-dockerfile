@@ -342,7 +342,6 @@ Aqui vai um exemplo da sintaxe base:
 VOLUME ["/data"]
 ~~~
 
-
 O comando docker run inicializa o volume recém-criado com todos os dados que existem no local especificado na imagem base. Por exemplo, considere o seguinte trecho do Dockerfile:
 
 ~~~Dockerfile
@@ -359,11 +358,13 @@ Esse Dockerfile resulta em uma imagem que faz com que o docker run crie um novo 
 A instrução USER define o nome do usuário (ou UID) e, opcionalmente, o grupo de usuários (ou GID) a ser usado como usuário e grupo padrão para o restante do estágio atual. O usuário especificado é usado para instruções RUN e, em tempo de execução, executa os comandos ENTRYPOINT e CMD relevantes.
 
 UID
+
 ~~~Dockerfile
 USER <user>[:<group>]
 ~~~
 
 GID
+
 ~~~Dockerfile
 USER <UID>[:<GID>]
 ~~~
@@ -403,6 +404,17 @@ RUN pwd
 ~~~
 
 A saída do comando pwd final neste Dockerfile seria /a/b/c.
+
+## ONBUILD
+
+A instrução ONBUILD adiciona à imagem uma instrução de gatilho a ser executada posteriormente, quando a imagem é usada como base para outra compilação.
+O gatilho será executado no contexto da compilação, como se tivesse sido inserido imediatamente após a instrução FROM no Dockerfile.
+
+sua sintaxa padrão é:
+
+~~~Dockerfile
+ONBUILD <INSTRUCTION>
+~~~
 
 <div align="center">
   <br/>
