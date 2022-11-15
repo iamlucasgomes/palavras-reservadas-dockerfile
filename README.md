@@ -153,6 +153,40 @@ CMD executavel param1
 
 </ul>
 
+## EXPOSE
+
+A instrução EXPOSE informa ao Docker que o contêiner escuta nas portas de rede especificadas em tempo de execução. Você pode especificar se a porta escuta em TCP ou UDP e o padrão é TCP se o protocolo não for especificado.
+
+A instrução EXPOSE na verdade não publica a porta. Funciona como um tipo de documentação entre a pessoa que constrói a imagem e a pessoa que executa o container, sobre quais portas se pretende publicar. Para realmente publicar a porta ao executar o contêiner, use o sinalizador -p no docker run para publicar e mapear uma ou mais portas, ou o sinalizador -P para publicar todas as portas expostas e mapeá-las para portas de ordem superior.
+
+<ul>
+<li>Por padrão, EXPOSE assume TCP. Você também pode especificar UDP:</li>
+
+~~~dockerfile
+EXPOSE 80/udp
+~~~
+
+<li>Para expor em TCP e UDP, inclua duas linhas:</li>
+
+~~~dockerfile
+EXPOSE 80/tcp
+EXPOSE 80/udp
+~~~
+
+Nesse caso, se você usar -P com o docker run, a porta será exposta uma vez para TCP e uma vez para UDP. Lembre-se de que -P usa uma porta de host de alta ordem efêmera no host, portanto, a porta não será a mesma para TCP e UDP.
+
+Independentemente das configurações de EXPOSE, você pode substituí-las em tempo de execução usando o sinalizador -p. Por exemplo
+
+~~~dockerfile
+docker run -p 80:80/tcp -p 80:80/udp ...
+~~~
+
+</ul>
+
+## ENV
+
+
+
 <div align="center">
   <br/>
   <br/>
