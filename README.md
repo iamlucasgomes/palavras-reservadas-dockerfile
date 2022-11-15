@@ -185,7 +185,42 @@ docker run -p 80:80/tcp -p 80:80/udp ...
 
 ## ENV
 
+Usado para definir variáveis ​​de ambiente durante a construção da imagem.
 
+A sintaxe basica é:
+
+~~~dockerfile
+ENV <key>=<value> ...
+~~~
+
+Para facilitar a execução de novos softwares, você pode usar o ENV para atualizar a variável de ambiente PATH para o software que seu contêiner instala. Por exemplo, ENV PATH=/usr/local/nginx/bin:$PATH garante que o CMD ["nginx"] simplesmente funcione.
+
+A instrução ENV também é útil para fornecer variáveis de ambiente necessárias específicas para serviços que você deseja conteinerizar, como PGDATA do Postgres.
+
+Por fim, o ENV também pode ser usado para definir números de versão comumente usados para que os aumentos de versão sejam mais fáceis de manter, como visto no exemplo a seguir:
+
+~~~dockerfile
+ENV PG_MAJOR=9.3
+ENV PG_VERSION=9.3.4
+RUN curl -SL https://example.com/postgres-$PG_VERSION.tar.xz | tar -xJC /usr/src/postgres && …
+ENV PATH=/usr/local/postgres-$PG_MAJOR/bin:$PATH
+~~~
+
+Também podemos passar varias vezes a instrução ENV ou resumir tudo em uma linha de comando como mostrarei nos exemplos abaixo:
+
+exemplo com varias linhas:
+
+~~~dockerfile
+ENV MY_NAME="John Doe"
+ENV MY_DOG=Rex\ The\ Dog
+ENV MY_CAT=fluffy
+~~~
+
+exemplo resumido:
+
+~~~dockerfile
+ENV MY_NAME="John Doe" MY_DOG=Rex\ The\ Dog \ MY_CAT=fluffy
+~~~
 
 <div align="center">
   <br/>
