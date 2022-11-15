@@ -257,6 +257,80 @@ RUN mkdir -p /usr/src/things \
 
 Para outros itens (arquivos, diretórios) que não requerem o recurso de extração automática de tar do ADD, você deve sempre usar COPY.
 
+## ENTRYPOINT
+
+O melhor uso para ENTRYPOINT é definir o comando principal da imagem, permitindo que essa imagem seja executada como se fosse esse comando (e então use CMD como os sinalizadores padrão).
+
+Vamos começar com um exemplo de imagem para a ferramenta de linha de comando s3cmd:
+
+~~~dockerfile
+ENTRYPOINT ["s3cmd"]
+CMD ["--help"]
+~~~
+
+Agora a imagem pode ser executada assim para mostrar a ajuda do comando:
+
+~~~dockerfile
+docker run s3cmd
+~~~
+
+Ou usando os parâmetros corretos para executar um comando:
+
+~~~dockerfile
+docker run s3cmd ls s3://mybucket
+~~~
+
+Isso é útil porque o nome da imagem pode dobrar como uma referência ao binário, conforme mostrado no comando acima.
+
+A instrução ENTRYPOINT também pode ser usada em combinação com um script auxiliar, permitindo que funcione de forma semelhante ao comando acima, mesmo quando a inicialização da ferramenta pode exigir mais de uma etapa.
+
+Por exemplo, a imagem oficial do Postgres usa o seguinte script como seu PONTO DE ENTRADA:
+
+~~~bash
+#!/bin/bash
+set -e
+
+if [ "$1" = 'postgres' ]; then
+    chown -R postgres "$PGDATA"
+
+    if [ -z "$(ls -A "$PGDATA")" ]; then
+        gosu postgres initdb
+    fi
+
+    exec gosu postgres "$@"
+fi
+
+exec "$@"
+~~~
+
+O script auxiliar é copiado para o contêiner e executado via ENTRYPOINT no início do contêiner:
+
+~~~dockerfile
+COPY ./docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["postgres"]
+~~~
+
+Este script permite que o usuário interaja com o Postgres de várias maneiras.
+
+Ele pode simplesmente iniciar o Postgres:
+
+~~~Dockerfile
+docker run postgres
+~~~
+
+Ou pode ser usado para executar o Postgres e passar parâmetros para o servidor:
+
+~~~Dockerfile
+docker run postgres postgres --help
+~~~
+
+Por fim, também pode ser usado para iniciar uma ferramenta totalmente diferente, como o Bash:
+
+~~~Dockerfile
+docker run --rm -it postgres bash
+~~~
+
 <div align="center">
   <br/>
   <br/>
