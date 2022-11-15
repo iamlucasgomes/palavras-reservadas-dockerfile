@@ -354,6 +354,35 @@ VOLUME /myvol
 
 Esse Dockerfile resulta em uma imagem que faz com que o docker run crie um novo ponto de montagem em /myvol e copie o arquivo de saudação no volume recém-criado.
 
+## USER
+
+A instrução USER define o nome do usuário (ou UID) e, opcionalmente, o grupo de usuários (ou GID) a ser usado como usuário e grupo padrão para o restante do estágio atual. O usuário especificado é usado para instruções RUN e, em tempo de execução, executa os comandos ENTRYPOINT e CMD relevantes.
+
+UID
+~~~Dockerfile
+USER <user>[:<group>]
+~~~
+
+GID
+~~~Dockerfile
+USER <UID>[:<GID>]
+~~~
+
+<i>Observe que ao especificar um grupo para o usuário, o usuário terá apenas a associação de grupo especificada.Quaisquer outras associações de grupo configuradas serão ignoradas.</i>
+
+<b><i>Aviso
+Quando o usuário não tiver um grupo primário, a imagem (ou as próximas instruções) serão executadas com o grupo raiz.
+No Windows, o usuário deve ser criado primeiro se não for uma conta interna.
+Isso pode ser feito com o comando net user chamado como parte de um Dockerfile.</b></i>
+
+~~~Dockerfile
+FROM microsoft/windowsservercore
+# Criar usuário do Windows no contêiner
+RUN net user /add patrick
+# Defina-o para comandos subsequentes
+USER patrick
+~~~
+
 <div align="center">
   <br/>
   <br/>
