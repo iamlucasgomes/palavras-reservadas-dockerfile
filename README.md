@@ -410,7 +410,7 @@ A saída do comando pwd final neste Dockerfile seria /a/b/c.
 A instrução ONBUILD adiciona à imagem uma instrução de gatilho a ser executada posteriormente, quando a imagem é usada como base para outra compilação.
 O gatilho será executado no contexto da compilação, como se tivesse sido inserido imediatamente após a instrução FROM no Dockerfile.
 
-sua sintaxa padrão é:
+sua sintaxe padrão é:
 
 ~~~Dockerfile
 ONBUILD <INSTRUCTION>
