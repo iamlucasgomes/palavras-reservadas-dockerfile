@@ -383,6 +383,27 @@ RUN net user /add patrick
 USER patrick
 ~~~
 
+## WORKDIR
+
+A instrução WORKDIR define o diretório de trabalho para quaisquer instruções RUN, CMD, ENTRYPOINT, COPY e ADD que a seguem no Dockerfile. Se o WORKDIR não existir, ele será criado mesmo que não seja usado em nenhuma instrução subsequente do Dockerfile.
+
+A sintaxe padrão é:
+
+~~~Dockerfile
+WORKDIR /path/to/workdir
+~~~
+
+A instrução WORKDIR pode ser usada várias vezes em um Dockerfile. Se um caminho relativo for fornecido, ele será relativo ao caminho da instrução WORKDIR anterior. Por exemplo:
+
+~~~Dockerfile
+WORKDIR /a
+WORKDIR b
+WORKDIR c
+RUN pwd
+~~~
+
+A saída do comando pwd final neste Dockerfile seria /a/b/c.
+
 <div align="center">
   <br/>
   <br/>
