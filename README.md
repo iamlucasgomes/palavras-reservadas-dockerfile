@@ -331,6 +331,29 @@ Por fim, também pode ser usado para iniciar uma ferramenta totalmente diferente
 docker run --rm -it postgres bash
 ~~~
 
+## VOLUME
+
+A instrução VOLUME cria um ponto de montagem com o nome especificado e o marca como contendo volumes montados externamente do host nativo ou de outros contêineres.
+O valor pode ser uma matriz JSON, VOLUME ["/var/log/"], ou uma string simples com vários argumentos, como VOLUME /var/log ou VOLUME /var/log /var/db.
+
+Aqui vai um exemplo da sintaxe base:
+
+~~~Dockerfile
+VOLUME ["/data"]
+~~~
+
+
+O comando docker run inicializa o volume recém-criado com todos os dados que existem no local especificado na imagem base. Por exemplo, considere o seguinte trecho do Dockerfile:
+
+~~~Dockerfile
+FROM ubuntu
+RUN mkdir /myvol
+RUN echo "hello world" > /myvol/greeting
+VOLUME /myvol
+~~~
+
+Esse Dockerfile resulta em uma imagem que faz com que o docker run crie um novo ponto de montagem em /myvol e copie o arquivo de saudação no volume recém-criado.
+
 <div align="center">
   <br/>
   <br/>
